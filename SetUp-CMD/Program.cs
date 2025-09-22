@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SetUp_CMD
+namespace AgrineSetUp_CMD
 {
     internal class Program
     {
