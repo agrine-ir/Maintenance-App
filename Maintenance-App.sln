@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrineSetUp.Core", "AgrineS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrineSetUp-CMD", "AgrineSetUp-CMD\AgrineSetUp-CMD.csproj", "{27A6530D-9CE6-471B-B9A3-CD3055DB5901}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrineSetUp-GUI", "AgrineSetUp-GUI\AgrineSetUp-GUI.csproj", "{E6031AE2-CCA1-47D7-AC07-D67B6D0C5B04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{27A6530D-9CE6-471B-B9A3-CD3055DB5901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27A6530D-9CE6-471B-B9A3-CD3055DB5901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27A6530D-9CE6-471B-B9A3-CD3055DB5901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6031AE2-CCA1-47D7-AC07-D67B6D0C5B04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6031AE2-CCA1-47D7-AC07-D67B6D0C5B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6031AE2-CCA1-47D7-AC07-D67B6D0C5B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6031AE2-CCA1-47D7-AC07-D67B6D0C5B04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
