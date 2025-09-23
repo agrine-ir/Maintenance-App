@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrineSetUp.Core", "AgrineSetUp.Core\AgrineSetUp.Core.csproj", "{54D6EC53-5E1A-487F-A46B-B6ABF67A03F1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrineSetUp-CMD", "AgrineSetUp-CMD\AgrineSetUp-CMD.csproj", "{27A6530D-9CE6-471B-B9A3-CD3055DB5901}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrineSetUp-GUI", "AgrineSetUp-GUI\AgrineSetUp-GUI.csproj", "{E6031AE2-CCA1-47D7-AC07-D67B6D0C5B04}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{54D6EC53-5E1A-487F-A46B-B6ABF67A03F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54D6EC53-5E1A-487F-A46B-B6ABF67A03F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54D6EC53-5E1A-487F-A46B-B6ABF67A03F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54D6EC53-5E1A-487F-A46B-B6ABF67A03F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{27A6530D-9CE6-471B-B9A3-CD3055DB5901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27A6530D-9CE6-471B-B9A3-CD3055DB5901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27A6530D-9CE6-471B-B9A3-CD3055DB5901}.Release|Any CPU.ActiveCfg = Release|Any CPU
