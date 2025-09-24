@@ -59,7 +59,7 @@ Public Class ALButton
     ' Constructor
     ' ================================
     ''' <summary>
-    ''' Initializes a new instance of the <see cref="CustomButton"/> class with default settings.
+    ''' Initializes a new instance of the <see cref="ALButton"/> class with default settings.
     ''' </summary>
     Public Sub New()
         MyBase.New()
