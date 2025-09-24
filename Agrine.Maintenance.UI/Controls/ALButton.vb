@@ -13,29 +13,29 @@ Public Class ALButton
     ' Properties
     ' ================================
 
-    Private _borderRadius As Integer = 20
+    Private _borderRadius As Byte = 20
     ''' <summary>
     ''' Gets or sets the corner radius of the button (in pixels).
     ''' </summary>
-    Public Property BorderRadius As Integer
+    Public Property BorderRadius As Byte
         Get
             Return _borderRadius
         End Get
-        Set(value As Integer)
+        Set(value As Byte)
             _borderRadius = value
             Me.Invalidate() ' Redraw the control
         End Set
     End Property
 
-    Private _borderSize As Integer = 2
+    Private _borderSize As Byte = 2
     ''' <summary>
     ''' Gets or sets the thickness of the button border.
     ''' </summary>
-    Public Property BorderSize As Integer
+    Public Property BorderSize As Byte
         Get
             Return _borderSize
         End Get
-        Set(value As Integer)
+        Set(value As Byte)
             _borderSize = value
             Me.Invalidate()
         End Set

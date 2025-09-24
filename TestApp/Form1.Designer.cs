@@ -41,7 +41,7 @@
             this.alButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.alButton1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alButton1.ForeColor = System.Drawing.Color.White;
-            this.alButton1.Location = new System.Drawing.Point(249, 111);
+            this.alButton1.Location = new System.Drawing.Point(558, 344);
             this.alButton1.Name = "alButton1";
             this.alButton1.Size = new System.Drawing.Size(234, 112);
             this.alButton1.TabIndex = 0;
