@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59F20A24-9C13-4CE5-A4CB-33F7F4E731AC}</ProjectGuid>
+    <ProjectGuid>{0AD7FD2E-9255-4860-881B-C940839385B8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TestApp</RootNamespace>
-    <AssemblyName>TestApp</AssemblyName>
+    <RootNamespace>TestPro2</RootNamespace>
+    <AssemblyName>TestPro2</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -78,12 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Agrine.Maintenance.UI\Agrine.Maintenance.UI.vbproj">
-      <Project>{2f422993-665d-42b7-8d91-ae350c4482b1}</Project>
-      <Name>Agrine.Maintenance.UI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

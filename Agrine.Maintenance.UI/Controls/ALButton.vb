@@ -1,50 +1,83 @@
-﻿Imports System.Drawing
+﻿Imports System.ComponentModel
+Imports System.Drawing
 Imports System.Drawing.Drawing2D
-Imports System.Runtime.Serialization.Formatters
 Imports System.Windows.Forms
 
 ''' <summary>
-''' Custom button with rounded corners, border size, and border color options.
+''' Advanced custom button with:
+''' - Rounded corners
+''' - Custom border color and size
+''' - Hover animation
+''' - Predefined font options (via ALFont)
 ''' </summary>
 Public Class ALButton
     Inherits Button
 
     ' ================================
-    ' Properties
+    ' ENUM FOR FONT OPTIONS
     ' ================================
+    Public Enum ALFontStyle
+        SystemDefault
+        IRANSansX
+        SymbolFont
+    End Enum
 
-    Private _borderRadius As Byte = 20
-    ''' <summary>
-    ''' Gets or sets the corner radius of the button (in pixels).
-    ''' </summary>
-    Public Property BorderRadius As Byte
+    ' ================================
+    ' PRIVATE FIELDS
+    ' ================================
+    Private _alFont As ALFontStyle = ALFontStyle.SystemDefault
+    Private _cornerRadius As Integer = 8
+    Private _borderSize As Integer = 2
+    Private _borderColor As Color = Color.DimGray
+
+    ' For hover animation
+    Private _isHovered As Boolean = False
+    Private _hoverBackColor As Color = Color.LightBlue
+    Private _normalBackColor As Color = Color.LightGray
+    Private _animationTimer As Timer
+    Private _currentBackColor As Color
+
+    ' ================================
+    ' PROPERTIES
+    ' ================================
+    <Category("Appearance"),
+    Description("Choose a predefined font style for this button.")>
+    Public Property ALFont As ALFontStyle
         Get
-            Return _borderRadius
+            Return _alFont
         End Get
-        Set(value As Byte)
-            _borderRadius = value
-            Me.Invalidate() ' Redraw the control
+        Set(value As ALFontStyle)
+            _alFont = value
+            ApplyCustomFont()
         End Set
     End Property
 
-    Private _borderSize As Byte = 2
-    ''' <summary>
-    ''' Gets or sets the thickness of the button border.
-    ''' </summary>
-    Public Property BorderSize As Byte
+    <Category("Appearance"),
+    Description("Corner radius of the button.")>
+    Public Property CornerRadius As Integer
         Get
-            Return _borderSize
+            Return _cornerRadius
         End Get
-        Set(value As Byte)
-            _borderSize = value
+        Set(value As Integer)
+            _cornerRadius = Math.Max(0, value)
             Me.Invalidate()
         End Set
     End Property
 
-    Private _borderColor As Color = Color.Black
-    ''' <summary>
-    ''' Gets or sets the color of the button border.
-    ''' </summary>
+    <Category("Appearance"),
+    Description("Border size of the button.")>
+    Public Property BorderSize As Integer
+        Get
+            Return _borderSize
+        End Get
+        Set(value As Integer)
+            _borderSize = Math.Max(0, value)
+            Me.Invalidate()
+        End Set
+    End Property
+
+    <Category("Appearance"),
+    Description("Border color of the button.")>
     Public Property BorderColor As Color
         Get
             Return _borderColor
@@ -55,88 +88,171 @@ Public Class ALButton
         End Set
     End Property
 
+    <Category("Appearance"),
+    Description("Background color when hovered.")>
+    Public Property HoverBackColor As Color
+        Get
+            Return _hoverBackColor
+        End Get
+        Set(value As Color)
+            _hoverBackColor = value
+        End Set
+    End Property
+
+    <Category("Appearance"),
+    Description("Background color when not hovered.")>
+    Public Property NormalBackColor As Color
+        Get
+            Return _normalBackColor
+        End Get
+        Set(value As Color)
+            _normalBackColor = value
+            _currentBackColor = value
+            Me.Invalidate()
+        End Set
+    End Property
+
+    ' Hide the base Font property
+    <Browsable(False)>
+    Public Overrides Property Font As Font
+        Get
+            Return MyBase.Font
+        End Get
+        Set(value As Font)
+            ' Ignore direct font setting
+            MyBase.Font = value
+        End Set
+    End Property
+
     ' ================================
-    ' Constructor
+    ' CONSTRUCTOR
     ' ================================
-    ''' <summary>
-    ''' Initializes a new instance of the <see cref="ALButton"/> class with default settings.
-    ''' </summary>
     Public Sub New()
         MyBase.New()
         Me.FlatStyle = FlatStyle.Flat
         Me.FlatAppearance.BorderSize = 0
-        Me.Size = New Size(120, 45)
-        Me.BackColor = Color.MediumSlateBlue
-        Me.ForeColor = Color.White
-        Me.Text = "دکمه"
+        Me.ForeColor = Color.Black
+
+        _normalBackColor = Color.LightGray
+        _hoverBackColor = Color.LightBlue
+        _currentBackColor = _normalBackColor
+
+        ' Setup animation timer
+        _animationTimer = New Timer()
+        _animationTimer.Interval = 15 ' ~60fps
+        AddHandler _animationTimer.Tick, AddressOf AnimateBackground
     End Sub
 
     ' ================================
-    ' Methods
+    ' FONT LOGIC
     ' ================================
+    Private Sub ApplyCustomFont()
+        If Me.DesignMode OrElse LicenseManager.UsageMode = LicenseUsageMode.Designtime Then
+            MyBase.Font = New Font("Arial", 12, FontStyle.Regular)
+            Return
+        End If
 
-    ''' <summary>
-    ''' Creates a GraphicsPath with rounded corners based on the given rectangle and radius.
-    ''' </summary>
-    ''' <param name="rect">The rectangle bounds of the button.</param>
-    ''' <param name="radius">The corner radius.</param>
-    ''' <returns>A <see cref="GraphicsPath"/> representing the rounded rectangle.</returns>
-    Private Function GetFigurePath(rect As Rectangle, radius As Integer) As GraphicsPath
-        Dim path As New GraphicsPath()
-        Dim curveSize As Single = radius * 2.0F
+        Select Case _alFont
+            Case ALFontStyle.IRANSansX
+                MyBase.Font = FontManager.GetDefaultFont(12)
+            Case ALFontStyle.SymbolFont
+                MyBase.Font = FontManager.GetFontFrom("SymbolFont.ttf", 12)
+            Case ALFontStyle.SystemDefault
+                MyBase.Font = New Font(SystemFonts.DefaultFont.FontFamily, 12, FontStyle.Regular)
+        End Select
+    End Sub
 
-        path.StartFigure()
-        path.AddArc(rect.X, rect.Y, curveSize, curveSize, 180, 90)
-        path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 90)
-        path.AddArc(rect.Right - curveSize, rect.Bottom - curveSize, curveSize, curveSize, 0, 90)
-        path.AddArc(rect.X, rect.Bottom - curveSize, curveSize, curveSize, 90, 90)
-        path.CloseFigure()
+    Protected Overrides Sub OnHandleCreated(e As EventArgs)
+        MyBase.OnHandleCreated(e)
+        ApplyCustomFont()
+    End Sub
 
-        Return path
+    ' ================================
+    ' ANIMATION EVENTS
+    ' ================================
+    Protected Overrides Sub OnMouseEnter(e As EventArgs)
+        MyBase.OnMouseEnter(e)
+        _isHovered = True
+        _animationTimer.Start()
+    End Sub
+
+    Protected Overrides Sub OnMouseLeave(e As EventArgs)
+        MyBase.OnMouseLeave(e)
+        _isHovered = False
+        _animationTimer.Start()
+    End Sub
+
+    Private Sub AnimateBackground(sender As Object, e As EventArgs)
+        Try
+            Dim targetColor As Color = If(_isHovered, _hoverBackColor, _normalBackColor)
+
+            Dim t As Single = 0.1F
+            Dim r As Integer = CInt(_currentBackColor.R + (targetColor.R - _currentBackColor.R) * t)
+            Dim g As Integer = CInt(_currentBackColor.G + (targetColor.G - _currentBackColor.G) * t)
+            Dim b As Integer = CInt(_currentBackColor.B + (targetColor.B - _currentBackColor.B) * t)
+
+            _currentBackColor = Color.FromArgb(Clamp(r, 0, 255), Clamp(g, 0, 255), Clamp(b, 0, 255))
+            Me.Invalidate()
+
+            If _currentBackColor.ToArgb() = targetColor.ToArgb() Then
+                _animationTimer.Stop()
+            End If
+        Catch ex As Exception
+            _animationTimer.Stop()
+            Debug.WriteLine("Animation Error: " & ex.Message)
+        End Try
+    End Sub
+
+
+    Private Function Clamp(value As Integer, min As Integer, max As Integer) As Integer
+        Return Math.Max(min, Math.Min(max, value))
     End Function
 
-    ''' <summary>
-    ''' Overrides the Paint event to draw a custom button with rounded corners and border.
-    ''' </summary>
-    ''' <param name="pevent">The paint event arguments.</param>
+
+    ' ================================
+    ' CUSTOM DRAW
+    ' ================================
     Protected Overrides Sub OnPaint(pevent As PaintEventArgs)
-        MyBase.OnPaint(pevent)
-
-        Dim rectSurface As Rectangle = Me.ClientRectangle
-        Dim rectBorder As Rectangle = Rectangle.Inflate(rectSurface, -_borderSize, -_borderSize)
-
-        Dim smoothSize As Integer = If(_borderSize > 0, _borderSize, 2)
-
         pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias
 
-        ' If rounded corners are enabled
-        If _borderRadius > 2 Then
-            Using pathSurface As GraphicsPath = GetFigurePath(rectSurface, _borderRadius)
-                Using pathBorder As GraphicsPath = GetFigurePath(rectBorder, _borderRadius - _borderSize)
-                    Using penSurface As New Pen(Me.Parent.BackColor, smoothSize)
-                        Using penBorder As New Pen(_borderColor, _borderSize)
-                            ' Draw surface
-                            Me.Region = New Region(pathSurface)
-                            pevent.Graphics.DrawPath(penSurface, pathSurface)
+        Dim rect As Rectangle = Me.ClientRectangle
+        rect.Width -= 1
+        rect.Height -= 1
 
-                            ' Draw border
-                            If _borderSize >= 1 Then
-                                pevent.Graphics.DrawPath(penBorder, pathBorder)
-                            End If
-                        End Using
-                    End Using
-                End Using
+        Dim path As GraphicsPath = GetRoundedRectanglePath(rect, _cornerRadius)
+
+        ' Fill background
+        Using brush As New SolidBrush(_currentBackColor)
+            pevent.Graphics.FillPath(brush, path)
+        End Using
+
+        ' Draw border
+        If _borderSize > 0 Then
+            Using pen As New Pen(_borderColor, _borderSize)
+                pevent.Graphics.DrawPath(pen, path)
             End Using
-        Else
-            ' Normal rectangular button
-            Me.Region = New Region(rectSurface)
-            If _borderSize >= 1 Then
-                Using penBorder As New Pen(_borderColor, _borderSize)
-                    penBorder.Alignment = PenAlignment.Inset
-                    pevent.Graphics.DrawRectangle(penBorder, 0, 0, rectSurface.Width - 1, rectSurface.Height - 1)
-                End Using
-            End If
         End If
+
+        ' Draw text
+        TextRenderer.DrawText(pevent.Graphics, Me.Text, Me.Font, rect, Me.ForeColor,
+                              TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
+
     End Sub
+
+    Private Function GetRoundedRectanglePath(rect As Rectangle, radius As Integer) As GraphicsPath
+        Dim path As New GraphicsPath()
+        If radius <= 0 Then
+            path.AddRectangle(rect)
+            Return path
+        End If
+
+        Dim d As Integer = radius * 2
+        path.AddArc(rect.X, rect.Y, d, d, 180, 90)
+        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90)
+        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90)
+        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90)
+        path.CloseFigure()
+        Return path
+    End Function
 
 End Class
